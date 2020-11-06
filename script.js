@@ -18,7 +18,13 @@ take weather info from input field
 */
 
 
-
+var city 
+var temp
+var humidity
+var wind 
+var UV 
+var date 
+var icon 
 
 $(document).ready(function() {
 
@@ -27,33 +33,28 @@ $(document).ready(function() {
     
     $('#weather-form').submit(function(e) {
         e.preventDefault()
-        var city = $('#weather-input').val();
+        city = $('#weather-input').val();
         $.ajax({
             url: 'https://api.openweathermap.org/data/2.5/weather?q='+ city + '&appid=6d33391dce0cc9321d1501a34aba3f3d&units=imperial',
             type: "GET",
             dataType: "json",
             success: firstWeatherSuccess
-               
-
-         // error: function (error) {
-         // console.log(`Error ${error}`);
-         // };
-     
-     
-           
     
         });
-    
-    
+   
     });
 
-//make 5 day call
+
 });
 
 function firstWeatherSuccess(data){
 
         console.log(data);
-
+        temp = data.main.temp;
+        humidity = data.main.humidity;
+        wind = data.wind.speed;
+        date = data.dt;
+        icon = data.weather[0].icon;
         //getting UV AJAX call
      
      
@@ -64,24 +65,53 @@ function firstWeatherSuccess(data){
             url: 'https://api.openweathermap.org/data/2.5/uvi?&lat=' + lat + '&lon=' + lon + '&appid=6d33391dce0cc9321d1501a34aba3f3d',
              type: 'GET',
              dataType: "json",
-            success: function (data) {
-            console.log(data);
-            console.log(data.value);
-             }
+            success: secondWeatherSuccess 
          });
 
-     
+         
+     //AJAX call 5 day forecast
+         
+        
     
-        //  displaying info 
+       
+    
+}
+function secondWeatherSuccess(data) {
+    console.log(data);
+    UV = data.value;
 
-        $('#weather-info').html('');
-        //$("#weather-info").append('<p>' + city + '</p>');
-        $("#weather-info").append('<p>' + moment.unix(data.dt).format('MMMM DD, YYYY') + '</p>');
-        $("#weather-info").append('<p>' + data.main.temp + " degrees F" + '</p>');
-        $("#weather-info").append('<p>' + data.main.humidity + "% humidity" + '</p>');
-        $("#weather-info").append('<p>' + data.wind.speed + '</p>');
-        //$("#weather-info").append('<p>'  + data.value + '</p>');
-        $("#weather-info").append('<img src = "http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png">');
-   
+    $.ajax({
+        url: 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=6d33391dce0cc9321d1501a34aba3f3d',
+        type: 'GET',
+        dataType: "json",
+        success: thirdWeatherSuccess
+
+
+       });
     
+}
+function thirdWeatherSuccess(data) {
+    console.log(data);
+    var forecast = data.forecast;
+
+     //  displaying info 
+
+     $('#weather-info').html('');
+     $("#weather-info").append('<p>' + city + '</p>');
+     $("#weather-info").append('<p>' + moment.unix(date).format('MMMM DD, YYYY') + '</p>');
+     $("#weather-info").append('<p>' + temp + " degrees F" + '</p>');
+     $("#weather-info").append('<p>' + humidity + "% humidity" + '</p>');
+     $("#weather-info").append('<p>' + wind + '</p>');
+     $("#weather-info").append('<p>'  + UV + '</p>');
+     $("#weather-info").append('<img src = "http://openweathermap.org/img/wn/' + icon + '@2x.png">');
+     
+for (let i = 0; i < 5; i++) {
+  var Day = data.list[i];
+  var Temp = Day.main.temp;
+  var Humidity = Day.main.humidity;
+  var Date = Day.dt; 
+  var Icon = Day.weather.icon;
+  $("#weather-info").append('<p>' + Temp + '</p>');  
+}
+
 }
