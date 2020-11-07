@@ -55,10 +55,10 @@ function firstWeatherSuccess(data){
         wind = data.wind.speed;
         date = data.dt;
         icon = data.weather[0].icon;
-        //getting UV AJAX call
+       
      
      
-    
+    //AJAX call for UV
          var lat = data.coord.lat;
          var lon = data.coord.lon;
         $.ajax({
@@ -69,11 +69,7 @@ function firstWeatherSuccess(data){
          });
 
          
-     //AJAX call 5 day forecast
-         
-        
-    
-       
+     //AJAX call 5 day forecast      
     
 }
 function secondWeatherSuccess(data) {
@@ -81,7 +77,7 @@ function secondWeatherSuccess(data) {
     UV = data.value;
 
     $.ajax({
-        url: 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=6d33391dce0cc9321d1501a34aba3f3d',
+        url: 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=6d33391dce0cc9321d1501a34aba3f3d&units=imperial',
         type: 'GET',
         dataType: "json",
         success: thirdWeatherSuccess
@@ -99,19 +95,25 @@ function thirdWeatherSuccess(data) {
      $('#weather-info').html('');
      $("#weather-info").append('<p>' + city + '</p>');
      $("#weather-info").append('<p>' + moment.unix(date).format('MMMM DD, YYYY') + '</p>');
-     $("#weather-info").append('<p>' + temp + " degrees F" + '</p>');
-     $("#weather-info").append('<p>' + humidity + "% humidity" + '</p>');
-     $("#weather-info").append('<p>' + wind + '</p>');
-     $("#weather-info").append('<p>'  + UV + '</p>');
-     $("#weather-info").append('<img src = "http://openweathermap.org/img/wn/' + icon + '@2x.png">');
+     $("#weather-info").append('<p>' + "temperature: " +temp + " degrees F" + '</p>');
+     $("#weather-info").append('<p>' + "humidity: " + humidity + "%" + '</p>');
+     $("#weather-info").append('<p>' + "wind speed: " + wind + '</p>');
+     $("#weather-info").append('<p>'  + "UV index: " + UV + '</p>');
+    // $("#weather-info").append('<img src = "http://openweathermap.org/img/wn/' + icon + '@2x.png">');
      
-for (let i = 0; i < 5; i++) {
+     
+//creating 5 day forecast
+
+     for (let i = 0; i < 5; i++) {
   var Day = data.list[i];
   var Temp = Day.main.temp;
   var Humidity = Day.main.humidity;
   var Date = Day.dt; 
   var Icon = Day.weather.icon;
-  $("#weather-info").append('<p>' + Temp + '</p>');  
+  $("#weather-info").append('<img src = "http://openweathermap.org/img/wn/' + icon + '@2x.png">');
+  $("#weather-info").append('<p>' + Temp + " Fahrenheit" + '</p>');  
+  $("#weather-info").append('<p>' + humidity + "% humidity" + '</p>');
 }
+
 
 }
