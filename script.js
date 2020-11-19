@@ -104,15 +104,31 @@ function thirdWeatherSuccess(data) {
      
 //creating 5 day forecast
 
-     for (let i = 0; i < 5; i++) {
+
+    for (let i = 0; i < 5; i++) {
+
   var Day = data.list[i];
   var Temp = Day.main.temp;
   var Humidity = Day.main.humidity;
   var Date = Day.dt; 
   var Icon = Day.weather.icon;
-  $("#weather-info").append('<img src = "http://openweathermap.org/img/wn/' + icon + '@2x.png">');
-  $("#weather-info").append('<p>' + Temp + " Fahrenheit" + '</p>');  
-  $("#weather-info").append('<p>' + humidity + "% humidity" + '</p>');
+  
+  $('#weather-info').append(`
+  <div class="card" style="width: 30rem;">
+        <div class="row">
+            <div class="col-sm-6">
+        
+            <p> Temp: ${Temp} Fahrenheit</p>
+            <p> Humidity: ${Humidity} % </p>
+            <img src = "http://openweathermap.org/img/wn/${icon}.png" style="width: 100px;"> 
+            </div>
+        </div>`)
+     
+         
+        //change CSS width to 100px or so
+  //$("#weather-info").append('<img src = "http://openweathermap.org/img/wn/' + icon + '@2x.png">');
+  //$("#weather-info").append('<p>' + Temp + " Fahrenheit" + '</p>');  
+  //$("#weather-info").append('<p>' + humidity + "% humidity" + '</p>');
 }
 
 
