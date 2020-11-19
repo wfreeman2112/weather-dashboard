@@ -114,7 +114,7 @@ function thirdWeatherSuccess(data) {
   var Icon = Day.weather.icon;
   
   $('#weather-info').append(`
-  <div class="card" style="width: 30rem;">
+  <div class="card" style="width: 30rem; padding-left: 2rem; padding-top: 1rem;">
         <div class="row">
             <div class="col-sm-6">
         
